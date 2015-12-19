@@ -1,0 +1,37 @@
+<!DOCTYPE html> <!--without this the dropdown buttons only are half height-->
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    
+	<script src="hangons.js"></script>
+	<script src="https://bootswatch.com/bower_components/jquery/dist/jquery.js"></script>
+	<script src="https://bootswatch.com/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	
+    
+	<link rel="stylesheet" type="text/css" href="https://bootswatch.com/paper/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="hangons.css" />
+
+</head>
+<body>
+	<h1>Hangons</h1>
+	
+	<hr>
+	
+	First go to Google Takeout and download your hangouts data. Extract the Hangouts.json file from the zip and upload it here.
+	
+	<span class="input-group-btn">
+		<span class="btn btn-default btn-file">
+			Browse<input type="file"  id="fileinput">
+			<input type="text" class="form-control" disabled="" id="fileNameTextBox" readonly>
+		</span>
+	</span>
+	
+	<hr>
+	
+	
+	
+	<button type="button"  onclick="test()" class="btn btn-default">Test Download</button>
+    
+</body>
+</html>
