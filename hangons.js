@@ -1,8 +1,10 @@
 var jsonData;
+var simpleJson = [];
 
 function setUp()
 {
 	document.getElementById('fileinput').addEventListener('change', readFile, false);
+    document.getElementById('jsonBtn').onclick = downloadJson;
 }
 
 function readFile(evt) {
@@ -30,25 +32,32 @@ function readFile(evt) {
 
 function parseData()
 {
-    var i = 0;
-    for (; i < jsonData.conversation_state.length; i++)
+    for (var i=0; i < jsonData.conversation_state.length; i++)
     {
-        var participants = getParticipants(i);
-        var j = 0;
-        for(; j < jsonData.conversation_state[i].conversation_state.event.length; j++)
+        var conversation = {};
+        conversation.participants = getParticipants(i);
+        conversation.messages = [];
+        
+        for(var j=0; j < jsonData.conversation_state[i].conversation_state.event.length; j++)
         {
-            console.log("Sender:"+ getName(jsonData.conversation_state[i].conversation_state.event[j].sender_id.gaia_id, participants))
+            var message = {};
+            
+            message.sender = getName(jsonData.conversation_state[i].conversation_state.event[j].sender_id.gaia_id, conversation.participants);
             var d = new Date(0); //0 means it sets the date to the epoch
             d.setUTCSeconds(Math.floor(jsonData.conversation_state[i].conversation_state.event[j].timestamp/1000000));//convert from microseconds to seconds
-            console.log("At:"+d);
-
+            
+            message.unixtime = Math.floor(jsonData.conversation_state[i].conversation_state.event[j].timestamp/1000000);
+            message.time = d;
             if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment !== undefined)
             {//if it's a normal hangouts message
                 
+                var content ="";
                 for (var k = 0; k < jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment.length; k++)
                 {
-                    console.log("Message: "+jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment[k].text);
+                    //console.log("Message: "+jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment[k].text);
+                    content += jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment[k].text;
                 }
+                message.content = content;
             }
             
             
@@ -57,16 +66,25 @@ function parseData()
                 
                 for (var k = 0; k < jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment.length; k++)
                 {
-                    console.log("Image: "+jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[k].embed_item["embeds.PlusPhoto.plus_photo"].url);
+                    message.content = jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[k].embed_item["embeds.PlusPhoto.plus_photo"].url
                 }
             }
             
             else
             {
                 console.warn("%c Unknown format for conversation "+i+" message "+j+"", "background: #FF0000");
+                message.content = "Unknown format, unable to parse message "+j+" in conversation "+i;
             }
+            conversation.messages.push(message);
         }
+        conversation.messages.sort(function(a, b) 
+        {
+            return parseFloat(a.unixtime) - parseFloat(b.unixtime);
+        });
+        simpleJson.push(conversation);
     }
+    //console.dir(simpleJson);
+    document.getElementById("jsonBtn").className = "btn btn-default";
 }
 
 function getParticipants(index)
@@ -103,6 +121,11 @@ function getName(id, participants)
     return id;
 }
 
+function downloadJson()
+{
+    download("hangons.json", JSON.stringify(simpleJson, null, "\t"));
+}
+
 function download(filename, text) {
     var ele = document.createElement('a');
     ele.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -118,12 +141,6 @@ function download(filename, text) {
     }
 }
 
-function test()
-{
-	var temp = "Messages";
-	var title = "Hangons"+".txt";
-	download(title, temp);
-}
 
 window.onload = setUp;
 //As seen on http://stackoverflow.com/questions/2897619/using-html5-javascript-to-generate-and-save-a-file
