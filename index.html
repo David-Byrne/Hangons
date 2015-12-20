@@ -14,11 +14,18 @@
 
 </head>
 <body>
-	<h1>Hangons</h1>
+    
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <img src="images/Hangons2.png" class="pull-left " id="logo">
+                <a class="navbar-brand" href="#">Hangons</a>
+                
+            </div> 
+        </div>
+    </nav>
 	
-	<hr>
-	
-	First go to Google Takeout and download your hangouts data. Extract the Hangouts.json file from the zip and upload it here.
+	First go to <a href="https://takeout.google.com/settings/takeout">Google Takeout</a> and download your hangouts data. Extract the Hangouts.json file from the zip and upload it here.
 	
 	<span class="input-group-btn">
 		<span class="btn btn-default btn-file">
@@ -29,9 +36,45 @@
 	
 	<hr>
 	
+	<!--
+        <div class="btn-group">
+		<a href="#" class="btn btn-default">Simplified JSON</a>
+		<a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+		<span class="dropdown-menu">
+			<abbr title="JavaScript Object Natation">JSON</abbr> data with an object that contains an array of conversations and each conversation contains an array of message objects. Each 
+			message object has a sender, time and content attribute.
+		</span>
+	</div>
 	
+	<div class="btn-group">
+		<a href="#" class="btn btn-default">Plain Text</a>
+		<a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+		<span class="dropdown-menu">
+			A plain .txt file with the sender, time and content with one message's attributes per line.
+		</span>
+	</div>
 	
-	<button type="button"  onclick="test()" class="btn btn-default">Test Download</button>
+	<div class="btn-group">
+		<a href="#" class="btn btn-default">Comma Separated Value</a>
+		<a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+		<span class="dropdown-menu">
+			A .csv file with the sender, time and content separated with commas. One message is printed per line.
+		</span>
+	</div>
+	
+	<div class="btn-group">
+		<a href="#" class="btn btn-default" >HTML</a>
+		<a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+		<span class="dropdown-menu">
+			A <abbr title="Hyper Text Markup Language">HTML</abbr> file with the messages styled like the hangouts interface you're used to.
+		</span>
+	</div>
+
+	<hr>
+    
+    -->
+	
+	<button type="button"  onclick="test()" class="btn btn-default">Download</button>
     
 </body>
 </html>

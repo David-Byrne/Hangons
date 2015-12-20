@@ -19,7 +19,8 @@ function readFile(evt) {
 			jsonData = JSON.parse(reader.result);
             //console.log("Name: "+files[0].name);
 			//console.log("Size: "+files[0].size+" Bytes");
-			parseData();//this function will parse the JSON into a more user friendly format
+			parseData();
+			//console.dir(jsonData.conversation_state[0].conversation_state.event[23].chat_message.message_content.segment[0].text);
 		}
 	}
 	else 
@@ -31,6 +32,38 @@ function readFile(evt) {
 function parseData()
 {
     console.dir(jsonData);
+    var i = 0;
+    for (; i < jsonData.conversation_state.length; i++)
+    {
+        var j = 0;
+        for(; j < jsonData.conversation_state[i].conversation_state.event.length; j++)
+        {
+            //console.log(j);
+            if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment !== undefined)
+            {//if it's a normal hangouts message
+                var k = 0;
+                for (; k < jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment.length; k++)
+                {
+                    console.log(jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment[k].text);
+                }
+            }
+            
+            
+            else if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment !== undefined)
+            {//if it's an message
+                var k = 0;
+                for (; k < jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment.length; k++)
+                {
+                    console.log(jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[k].embed_item["embeds.PlusPhoto.plus_photo"].url);
+                }
+            }
+            
+            else
+            {
+                console.error("%c Unknown format for conversation "+i+" message "+j+"", "background: #FF0000");
+            }
+        }
+    }
 }
 
 function download(filename, text) {
