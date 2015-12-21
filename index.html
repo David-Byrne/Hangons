@@ -10,16 +10,16 @@
     <meta name="theme-color" content="#1AA260">
     <link rel="icon" sizes="192x192" href="images/favicon.png">
     
-	<script src="hangons.js"></script>
 	<script src="https://bootswatch.com/bower_components/jquery/dist/jquery.js"></script>
 	<script src="https://bootswatch.com/bower_components/bootstrap/dist/js/bootstrap.js"></script>
-	
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
+    <script src="hangons.js"></script>
     
 	<link rel="stylesheet" type="text/css" href="https://bootswatch.com/paper/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="hangons.css" />
 
 </head>
-<body>
+<body  ng-App="hangons" ng-controller="mainController" id="body">
     
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -60,11 +60,11 @@
         </div>
         
         
-        <!--
+        
         <div class="btn-group">
-            <a href="#" class="btn btn-default">Plain Text</a>
-            <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
-            <span class="dropdown-menu">
+            <a href="#" class="btn btn-default disabled colouredButton" id="txtBtn">Plain Text</a>
+            <a href="#" class="btn btn-default dropdown-toggle colouredButton" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+            <span class="dropdown-menu dataDescription">
                 A plain .txt file with the sender, time and content with one message's attributes per line.
             </span>
         </div>
@@ -88,6 +88,12 @@
         <hr>
         
         -->
+        <hr>
+        <span ng-repeat="file in angFiles track by $index">
+			<a href="#" class="btn btn-default colouredButton" ng-click="angDownload(file.participants, file.messages )"> {{file.participants.toString()}}</a>
+		</span>
+        
+        <!--<span ng-click="testAngular()"> X </span>-->
     </div>
 </body>
 </html>
