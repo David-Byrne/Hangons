@@ -1,10 +1,13 @@
 var jsonData;
 var simpleJson = [];
+var files = [];
+
 
 function setUp()
 {
 	document.getElementById('fileinput').addEventListener('change', readFile, false);
     document.getElementById('jsonBtn').onclick = downloadJson;
+    document.getElementById('txtBtn').onclick = toTxt;
 }
 
 function readFile(evt) {
@@ -85,6 +88,7 @@ function parseData()
     }
     //console.dir(simpleJson);
     document.getElementById("jsonBtn").className = "btn btn-default colouredButton";
+    document.getElementById("txtBtn").className = "btn btn-default colouredButton";
 }
 
 function getParticipants(index)
@@ -121,6 +125,32 @@ function getName(id, participants)
     return id;
 }
 
+function toTxt()
+{
+    for (var i=0; i < simpleJson.length; i++)
+    {
+        var conversation = {};
+        conversation.participants = [];
+        for (var k=0; k < simpleJson[i].participants.length; k++)
+        {
+            //console.dir(simpleJson[i]);
+            conversation.participants[k] = simpleJson[i].participants[k].name;
+        }
+        conversation.messages = "";
+        for (var j=0;j< simpleJson[i].messages.length; j++)
+        {
+            conversation.messages += simpleJson[i].messages[j].sender +" at "+simpleJson[i].messages[j].unixtime+" sent "
+            +simpleJson[i].messages[j].content+"\r\n";
+        }
+        files.push(conversation);
+       
+    }
+    console.dir(files);
+    angular.element(document.getElementById('body')).scope().showFiles();
+    
+    
+}
+
 function downloadJson()
 {
     download("hangons.json", JSON.stringify(simpleJson, null, "\t"));
@@ -141,6 +171,28 @@ function download(filename, text) {
     }
 }
 
+var hangons = angular.module('hangons', []);
+hangons.controller('mainController', function ($scope)
+{
+		
+    $scope.showFiles=function()
+    {
+        $scope.angFiles = files;
+        $scope.$apply();
+    };
+    
+    $scope.angDownload=function(fileName, fileValue)
+    {
+        fileName+=".txt";
+        download(fileName, fileValue);
+    }
+    
+    $scope.testAngular=function()
+    {
+        alert("test Passed");
+    }
+        
+});
 
 window.onload = setUp;
 //As seen on http://stackoverflow.com/questions/2897619/using-html5-javascript-to-generate-and-save-a-file
