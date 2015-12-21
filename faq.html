@@ -1,0 +1,75 @@
+<!DOCTYPE html> <!--without this the dropdown buttons only are half height-->
+<html lang="en">
+<head>
+    <title>Hangons</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="keywords" content="faq, Hangouts.json, Hangouts, json, client side">
+    <meta name="description" content="Commonly asked questions about Hangons">
+    <meta name="author" content="David Byrne">
+    <meta name="theme-color" content="#1AA260">
+    <link rel="icon" sizes="192x192" href="images/favicon.png">
+    
+	<script src="https://bootswatch.com/bower_components/jquery/dist/jquery.js"></script>
+	<script src="https://bootswatch.com/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
+    <script src="hangons.js"></script>
+    
+	<link rel="stylesheet" type="text/css" href="https://bootswatch.com/paper/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="hangons.css" />
+
+</head>
+<body  ng-App="hangons" ng-controller="mainController" id="body">
+    
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <img src="images/Hangons3.png" class="pull-left " id="logo"><!--Source: http://romannurik.github.io/AndroidAssetStudio/ -->
+                <a class="navbar-brand" href="index.html">Hangons</a>
+            </div>
+            <ul class="nav navbar-nav">
+			
+			    <li><a href="faq.html">FAQ</a></li>
+			
+		    </ul>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="https://github.com/David-Byrne/Hangons">Github</a></li>
+                </ul>
+            </div> 
+        </div>
+    </nav>
+    
+	<div id="mainContent">
+	    <div class="panel panel-default text-left">
+            <div class="panel-heading"><h5>1: Is it secure?</h5></div>
+            <div class="panel-body">
+                Yes, the code all runs client-side so your data never leaves your machine. Feel free to check the source code if you
+                don't believe me or even downlaod the files and run it yourself.
+            </div>
+        </div>
+        <div class="panel panel-default text-left">
+            <div class="panel-heading"><h5>2: Where do I get the Hangouts.json?</h5></div>
+            <div class="panel-body">
+                Go to https://takeout.google.com/settings/takeout, make sure the Hangouts option is selected and create the archive.
+                When it is ready open the zip and extract all files. In the Hangouts folder there should be the hangouts.json file you're
+                looking for.
+            </div>
+        </div>
+        <div class="panel panel-default text-left">
+            <div class="panel-heading"><h5>3: How can I open the files?</h5></div>
+            <div class="panel-body">
+                A basic text editor like notepad should be able to open any of the files. Even many browsers can open them.
+            </div>
+        </div>
+        <div class="panel panel-default text-left">
+            <div class="panel-heading"><h5>4: Can you add...?</h5></div>
+            <div class="panel-body">
+               Maybe. I'm only doing this in my free time as a side project but I'm very happy to get feedback. Submit your request 
+               <a href="https://docs.google.com/forms/d/1YEmJ5ScZbtJ6_U6RtpCLdhoSZs1i6kMipM0jVOBQnpc/viewform?usp=send_form">here</a> and
+               I'll see what I can do.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

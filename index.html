@@ -17,7 +17,6 @@
     
 	<link rel="stylesheet" type="text/css" href="https://bootswatch.com/paper/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="hangons.css" />
-
 </head>
 <body  ng-App="hangons" ng-controller="mainController" id="body">
     
@@ -25,8 +24,11 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <img src="images/Hangons3.png" class="pull-left " id="logo"><!--Source: http://romannurik.github.io/AndroidAssetStudio/ -->
-                <a class="navbar-brand" href="#">Hangons</a>
+                <a class="navbar-brand" href="index.html">Hangons</a>
             </div>
+            <ul class="nav navbar-nav">
+			    <li><a href="faq.html">FAQ</a></li>
+		    </ul>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="https://github.com/David-Byrne/Hangons">Github</a></li>
@@ -48,22 +50,22 @@
         <hr>
         
         Now choose what format you'd like it in, only simplified JSON is supported for now.<br>
-        <div class="btn-group">
+        <div class="btn-group spacedButton">
             <a href="#" class="btn btn-default disabled colouredButton" id="jsonBtn" >Simplified JSON</a>
-            <a href="#" class="btn btn-default dropdown-toggle colouredButton" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+            <a href="#" class="btn btn-default dropdown-toggle colouredButton " data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
             <span class="dropdown-menu dataDescription">
                 <span  class="dataDescription">
-                <abbr title="JavaScript Object Natation">JSON</abbr> data with an object that contains an array of conversations and each conversation contains an array of message objects. Each 
-                message object has a sender, time and content attribute.
+                <abbr title="JavaScript Object Natation">JSON</abbr> array of conversation objects and each conversation contains an array of participants and an 
+                array of message objects. Each message object has a sender, time and content attribute.
                 </span>
             </span>
         </div>
         
         
         
-        <div class="btn-group">
+        <div class="btn-group spacedButton">
             <a href="#" class="btn btn-default disabled colouredButton" id="txtBtn">Plain Text</a>
-            <a href="#" class="btn btn-default dropdown-toggle colouredButton" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+            <a href="#" class="btn btn-default dropdown-toggle colouredButton " data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
             <span class="dropdown-menu dataDescription">
                 A plain .txt file with the sender, time and content with one message's attributes per line.
             </span>
@@ -90,9 +92,10 @@
         -->
         <hr>
         <span ng-repeat="file in angFiles track by $index">
-			<a href="#" class="btn btn-default colouredButton" ng-click="angDownload(file.participants, file.messages )"> {{file.participants.toString()}}</a>
-		</span>
-        
+            <span class="spacedButton">
+			<a href="#" class="btn btn-default colouredButton " ng-click="angDownload(file.participants, file.messages )"> {{file.participants.toString()}}</a>
+		    <span>
+        </span>
         <!--<span ng-click="testAngular()"> X </span>-->
     </div>
 </body>
