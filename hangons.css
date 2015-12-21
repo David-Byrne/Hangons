@@ -25,3 +25,47 @@
     max-height: 65px;
     max-width: 100%
 }
+
+#mainContent
+{
+    padding: 5px 5px 5px 5px;
+    text-align: center;
+}
+
+.dataDescription
+{
+    padding: 3px 3px 3px 3px;
+}
+
+.brightText
+{
+    color: white;
+}
+
+.colouredButton
+{
+    background-color: #1AA260;
+    color: white;
+}
+.colouredButton:focus
+{
+    background-color: #168851;
+    color: white;
+}
+.colouredButton:hover
+{
+    background-color: #168851;
+    color: white;
+}
+.colouredButton:active
+{
+    background-color: #168851;
+    background-image: -webkit-radial-gradient(circle, #168851 10%, #1AA260 11%);
+    background-image: -o-radial-gradient(circle, #168851 10%, #1AA260 11%);
+    background-image: radial-gradient(circle, #168851 10%, #1AA260 11%);
+    background-repeat: no-repeat;
+    -webkit-background-size: 1000% 1000%;
+            background-size: 1000%;
+    -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
