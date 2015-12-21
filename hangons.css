@@ -42,6 +42,11 @@
     color: white;
 }
 
+.spacedButton
+{
+    padding: 5px 5px 5px 5px;
+}
+
 .colouredButton
 {
     background-color: #1AA260;
