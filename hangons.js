@@ -84,7 +84,7 @@ function parseData()
         simpleJson.push(conversation);
     }
     //console.dir(simpleJson);
-    document.getElementById("jsonBtn").className = "btn btn-default";
+    document.getElementById("jsonBtn").className = "btn btn-default colouredButton";
 }
 
 function getParticipants(index)
