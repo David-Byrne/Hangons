@@ -79,3 +79,14 @@
     -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
 }
+
+.dropdown
+{
+    background-color: #1AA260;
+    color: white;
+}
+.dropdown:focus
+{
+    background-color: #168851 !important;
+    color: white;
+}
