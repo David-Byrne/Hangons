@@ -139,8 +139,9 @@ function toTxt()
         conversation.messages = "";
         for (var j=0;j< simpleJson[i].messages.length; j++)
         {
-            conversation.messages += simpleJson[i].messages[j].sender +" at "+simpleJson[i].messages[j].unixtime+" sent "
-            +simpleJson[i].messages[j].content+"\r\n";
+            //console.log(unixToReadable(simpleJson[i].messages[j].unixtime));
+            conversation.messages += simpleJson[i].messages[j].sender +" at "+unixToReadable(simpleJson[i].messages[j].unixtime)+
+            " sent: "+simpleJson[i].messages[j].content+"\r\n";
         }
         files.push(conversation);
        
@@ -149,6 +150,20 @@ function toTxt()
     angular.element(document.getElementById('body')).scope().showFiles();
     
     
+}
+
+function unixToReadable(unix)
+{
+    var d = new Date(0); //0 means it sets the date to the epoch
+    d.setUTCSeconds(unix);//convert from microseconds to seconds
+    /*var hours = d.getHours();
+    var minutes = d.getMinutes();
+    var time ="";
+    (hours > 10)? time += hours: time+="0"+hours;
+    time+=":";
+    (minutes > 10)? time += minutes: time+="0"+minutes;
+    time+=", ";*/
+    return(d.toLocaleTimeString() +", "+ d.toDateString());
 }
 
 function downloadJson()

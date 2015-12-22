@@ -47,6 +47,11 @@
     padding: 5px 5px 5px 5px;
 }
 
+.fileButton
+{
+    margin:4px 2px 4px 2px;
+}
+
 .colouredButton
 {
     background-color: #1AA260;
