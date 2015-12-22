@@ -23,17 +23,24 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
                 <img src="images/Hangons3.png" class="pull-left " id="logo"><!--Source: http://romannurik.github.io/AndroidAssetStudio/ -->
                 <a class="navbar-brand" href="index.html">Hangons</a>
             </div>
-            <ul class="nav navbar-nav">
-			    <li><a href="faq.html">FAQ</a></li>
-		    </ul>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="faq.html">FAQ</a></li>
+                </ul>
+            
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="https://github.com/David-Byrne/Hangons">Github</a></li>
                 </ul>
-            </div> 
+            </div>
         </div>
     </nav>
     
@@ -52,7 +59,7 @@
         Now choose what format you'd like it in, only simplified JSON is supported for now.<br>
         <div class="btn-group spacedButton">
             <a href="#" class="btn btn-default disabled colouredButton" id="jsonBtn" >Simplified JSON</a>
-            <a href="#" class="btn btn-default dropdown-toggle colouredButton " data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+            <a href="#" class="btn btn-default dropdown-toggle colouredButton dropdown" data-toggle="dropdown" aria-expanded="false"><span class="caret brightText"></span></a>
             <span class="dropdown-menu dataDescription">
                 <span  class="dataDescription">
                 <abbr title="JavaScript Object Natation">JSON</abbr> array of conversation objects and each conversation contains an array of participants and an 
@@ -65,20 +72,20 @@
         
         <div class="btn-group spacedButton">
             <a href="#" class="btn btn-default disabled colouredButton" id="txtBtn">Plain Text</a>
-            <a href="#" class="btn btn-default dropdown-toggle colouredButton " data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+            <a href="#" class="btn btn-default dropdown-toggle colouredButton  dropdown" data-toggle="dropdown" aria-expanded="false"><span class="caret brightText"></span></a>
             <span class="dropdown-menu dataDescription">
                 A plain .txt file with the sender, time and content with one message's attributes per line.
             </span>
         </div>
-        <!--
-        <div class="btn-group">
-            <a href="#" class="btn btn-default">Comma Separated Value</a>
-            <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
-            <span class="dropdown-menu">
+        
+        <div class="btn-group  spacedButton">
+            <a href="#" class="btn btn-default  disabled colouredButton" id="csvBtn">Comma Separated Value</a>
+            <a href="#" class="btn btn-default dropdown-toggle colouredButton dropdown" data-toggle="dropdown" aria-expanded="false"><span class="caret brightText"></span></a>
+            <span class="dropdown-menu  dataDescription">
                 A .csv file with the sender, time and content separated with commas. One message is printed per line.
             </span>
         </div>
-        
+        <!--
         <div class="btn-group">
             <a href="#" class="btn btn-default" >HTML</a>
             <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
@@ -93,7 +100,7 @@
         <hr>
         <span ng-repeat="file in angFiles track by $index">
             <span class="fileButton">
-			<a href="#" class="btn btn-default colouredButton fileButton" ng-click="angDownload(file.participants, file.messages )"> {{file.participants.toString()}}</a>
+			<a href="#" class="btn btn-default colouredButton fileButton" ng-click="angDownload(file.participants+file.type, file.messages )"> {{file.participants.toString()+file.type}}</a>
 		    <span>
         </span>
         <!--<span ng-click="testAngular()"> X </span>-->

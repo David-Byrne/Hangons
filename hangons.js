@@ -8,6 +8,7 @@ function setUp()
 	document.getElementById('fileinput').addEventListener('change', readFile, false);
     document.getElementById('jsonBtn').onclick = downloadJson;
     document.getElementById('txtBtn').onclick = toTxt;
+    document.getElementById('csvBtn').onclick = toCsv;
 }
 
 function readFile(evt) {
@@ -46,11 +47,7 @@ function parseData()
             var message = {};
             
             message.sender = getName(jsonData.conversation_state[i].conversation_state.event[j].sender_id.gaia_id, conversation.participants);
-            var d = new Date(0); //0 means it sets the date to the epoch
-            d.setUTCSeconds(Math.floor(jsonData.conversation_state[i].conversation_state.event[j].timestamp/1000000));//convert from microseconds to seconds
-            
             message.unixtime = Math.floor(jsonData.conversation_state[i].conversation_state.event[j].timestamp/1000000);
-            message.time = d;
             if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment !== undefined)
             {//if it's a normal hangouts message
                 
@@ -89,6 +86,7 @@ function parseData()
     //console.dir(simpleJson);
     document.getElementById("jsonBtn").className = "btn btn-default colouredButton";
     document.getElementById("txtBtn").className = "btn btn-default colouredButton";
+    document.getElementById("csvBtn").className = "btn btn-default colouredButton";
 }
 
 function getParticipants(index)
@@ -127,19 +125,19 @@ function getName(id, participants)
 
 function toTxt()
 {
+    files = [];
     for (var i=0; i < simpleJson.length; i++)
     {
         var conversation = {};
+        conversation.type = ".txt";
         conversation.participants = [];
         for (var k=0; k < simpleJson[i].participants.length; k++)
         {
-            //console.dir(simpleJson[i]);
             conversation.participants[k] = simpleJson[i].participants[k].name;
         }
         conversation.messages = "";
         for (var j=0;j< simpleJson[i].messages.length; j++)
         {
-            //console.log(unixToReadable(simpleJson[i].messages[j].unixtime));
             conversation.messages += simpleJson[i].messages[j].sender +" at "+unixToReadable(simpleJson[i].messages[j].unixtime)+
             " sent: "+simpleJson[i].messages[j].content+"\r\n";
         }
@@ -148,21 +146,37 @@ function toTxt()
     }
     console.dir(files);
     angular.element(document.getElementById('body')).scope().showFiles();
-    
-    
+}
+
+function toCsv()
+{
+    files = [];
+    for (var i=0; i < simpleJson.length; i++)
+    {
+        var conversation = {};
+        conversation.type = ".csv";
+        conversation.participants = [];
+        for (var k=0; k < simpleJson[i].participants.length; k++)
+        {
+            conversation.participants[k] = simpleJson[i].participants[k].name;
+        }
+        conversation.messages = "";
+        for (var j=0;j< simpleJson[i].messages.length; j++)
+        {
+            conversation.messages += simpleJson[i].messages[j].sender +","+unixToReadable(simpleJson[i].messages[j].unixtime)+
+            ","+simpleJson[i].messages[j].content+"\r\n";
+        }
+        files.push(conversation);
+       
+    }
+    console.dir(files);
+    angular.element(document.getElementById('body')).scope().showFiles();
 }
 
 function unixToReadable(unix)
 {
     var d = new Date(0); //0 means it sets the date to the epoch
-    d.setUTCSeconds(unix);//convert from microseconds to seconds
-    /*var hours = d.getHours();
-    var minutes = d.getMinutes();
-    var time ="";
-    (hours > 10)? time += hours: time+="0"+hours;
-    time+=":";
-    (minutes > 10)? time += minutes: time+="0"+minutes;
-    time+=", ";*/
+    d.setUTCSeconds(unix);
     return(d.toLocaleTimeString() +", "+ d.toDateString());
 }
 
@@ -198,7 +212,6 @@ hangons.controller('mainController', function ($scope)
     
     $scope.angDownload=function(fileName, fileValue)
     {
-        fileName+=".txt";
         download(fileName, fileValue);
     }
     
@@ -206,7 +219,6 @@ hangons.controller('mainController', function ($scope)
     {
         alert("test Passed");
     }
-        
 });
 
 window.onload = setUp;
