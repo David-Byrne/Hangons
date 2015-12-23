@@ -9,6 +9,7 @@ function setUp()
     document.getElementById('jsonBtn').onclick = downloadJson;
     document.getElementById('txtBtn').onclick = toTxt;
     document.getElementById('csvBtn').onclick = toCsv;
+    document.getElementById('htmlBtn').onclick = toHtml;
 }
 
 function readFile(evt) {
@@ -100,6 +101,7 @@ function parseData()
     document.getElementById("jsonBtn").className = "btn btn-default colouredButton";
     document.getElementById("txtBtn").className = "btn btn-default colouredButton";
     document.getElementById("csvBtn").className = "btn btn-default colouredButton";
+    document.getElementById("htmlBtn").className = "btn btn-default colouredButton";
 }
 
 function getParticipants(index)
@@ -143,12 +145,7 @@ function toTxt()
     {
         var conversation = {};
         conversation.type = ".txt";
-        conversation.participants = [];
-        for (var k=0; k < simpleJson[i].participants.length; k++)
-        {
-            conversation.participants[k] = simpleJson[i].participants[k].name;
-        }
-        conversation.name = nameFile(i, conversation.participants);
+        conversation.name = nameFile(i);
         conversation.messages = "";
         for (var j=0;j< simpleJson[i].messages.length; j++)
         {
@@ -169,12 +166,7 @@ function toCsv()
     {
         var conversation = {};
         conversation.type = ".csv";
-        conversation.participants = [];
-        for (var k=0; k < simpleJson[i].participants.length; k++)
-        {
-            conversation.participants[k] = simpleJson[i].participants[k].name;
-        }
-        conversation.name = nameFile(i, conversation.participants);
+        conversation.name = nameFile(i);
         conversation.messages = "";
         for (var j=0;j< simpleJson[i].messages.length; j++)
         {
@@ -188,6 +180,59 @@ function toCsv()
     angular.element(document.getElementById('body')).scope().showFiles();
 }
 
+function toHtml()
+{
+    files = [];
+    for (var i=0; i < simpleJson.length; i++)
+    {
+        var conversation = {};
+        conversation.type = ".html";
+        conversation.name = nameFile(i);
+        conversation.messages = "<!DOCTYPE html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'>"+
+        "<title>Hangons Backup</title><link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>"+
+        "<style>body{background-color: #ECEFF1;font-family: 'Roboto', sans-serif;}"+"\r\n"+
+        ".m{padding: 10px;margin: 2px;display: inline-block;border-radius:10px;max-width: 77vw;}"+"\r\n"+
+        ".s{border-top-right-radius: 0px;float:right;background-color: #CFD8DC;}"+"\r\n"+
+        ".r{border-top-left-radius: 0px;float:left;background-color: #ffffff;}"+"\r\n"+
+        ".d{font-size: x-small;}"+"\r\n"+
+        ".c{float:left;border-radius: 50%;width: 20px;height: 20px;background-color: #1AA260;color: white;text-align: center;}"+"\r\n"+
+        ".nl{clear: both;float: left;display: block;position: relative;}"+"\r\n"+
+        "</style></head><body id='body'>";
+        for (var j=0;j< simpleJson[i].messages.length; j++)
+        {
+            conversation.messages += getLetterCircle(i,simpleJson[i].messages[j].sender) +"<div class='m "
+            +getMessageClass(i,simpleJson[i].messages[j].sender)+"'>"+
+            simpleJson[i].messages[j].content+"<div class='d'>"+simpleJson[i].messages[j].sender +", "
+            +unixToReadable(simpleJson[i].messages[j].unixtime)+"</div></div>"+"\r\n <div class='nl'></div>";
+        }
+        conversation.messages+="</body></html>";
+        files.push(conversation);
+       
+    }
+    //console.dir(files);
+    angular.element(document.getElementById('body')).scope().showFiles();
+}
+
+function getLetterCircle(i, sender)
+{
+    if (sender === simpleJson[i].participants[0].name)
+    {
+        return "";
+    }
+    return "<div class='c'>"+sender.charAt(0)+"</div>";
+}
+
+function getMessageClass(i, sender)
+{
+    //console.dir(sender)
+    //console.dir(simpleJson[i].participants[0]);
+    if (sender === simpleJson[i].participants[0].name)
+    {
+        return "s";
+    }
+    return "r";
+}
+
 function unixToReadable(unix)
 {
     var d = new Date(0); //0 means it sets the date to the epoch
@@ -195,20 +240,25 @@ function unixToReadable(unix)
     return(d.toLocaleTimeString() +", "+ d.toDateString());
 }
 
-function nameFile(i, participants)
+function nameFile(i)
 {
     //console.dir(file);
-    console.dir(jsonData.conversation_state[i].conversation_state.conversation.id);
+    //console.dir(jsonData.conversation_state[i].conversation_state.conversation.id);
     if ((jsonData.conversation_state[i].conversation_state.conversation.name !== undefined)&&
         (jsonData.conversation_state[i].conversation_state.conversation.name != ""))
     {
-        console.log("name= "+jsonData.conversation_state[i].conversation_state.conversation.name);
+        //console.log("name= "+jsonData.conversation_state[i].conversation_state.conversation.name);
         return jsonData.conversation_state[i].conversation_state.conversation.name;
+    }
+    var participants = [];
+    for (var k=0; k < simpleJson[i].participants.length; k++)
+    {
+        participants[k] = simpleJson[i].participants[k].name;
     }
     var part1 = participants.shift();//takes out first entry in array, the person's name
     var name = participants.toString();
     participants.unshift(part1);//Puts back the person's name as the first entry
-    console.log("name= "+name);
+    //console.log("name= "+name);
     return name;
 }
 

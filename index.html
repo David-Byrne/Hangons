@@ -78,26 +78,24 @@
             </span>
         </div>
         
-        <div class="btn-group  spacedButton">
-            <a href="#" class="btn btn-default  disabled colouredButton" id="csvBtn">Comma Separated Value</a>
+        <div class="btn-group spacedButton">
+            <a href="#" class="btn btn-default disabled colouredButton" id="csvBtn">Comma Separated Value</a>
             <a href="#" class="btn btn-default dropdown-toggle colouredButton dropdown" data-toggle="dropdown" aria-expanded="false"><span class="caret brightText"></span></a>
-            <span class="dropdown-menu  dataDescription">
+            <span class="dropdown-menu dataDescription">
                 A .csv file with the sender, time and content separated with commas. One message is printed per line.
             </span>
         </div>
-        <!--
-        <div class="btn-group">
-            <a href="#" class="btn btn-default" >HTML</a>
-            <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
-            <span class="dropdown-menu">
+        
+        <div class="btn-group spacedButton">
+            <a href="#" class="btn btn-default disabled colouredButton" id="htmlBtn">HTML</a>
+            <a href="#" class="btn btn-default dropdown-toggle colouredButton dropdown" data-toggle="dropdown" aria-expanded="false"><span class="caret  brightText"></span></a>
+            <span class="dropdown-menu  dataDescription">
                 A <abbr title="Hyper Text Markup Language">HTML</abbr> file with the messages styled like the hangouts interface you're used to.
             </span>
         </div>
 
         <hr>
         
-        -->
-        <hr>
         <span ng-repeat="file in angFiles track by $index">
             <span class="fileButton">
 			<a href="#" class="btn btn-default colouredButton fileButton" ng-click="angDownload(file.name+file.type, file.messages )"> {{file.name+file.type}}</a>
