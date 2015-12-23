@@ -45,36 +45,49 @@ function parseData()
         for(var j=0; j < jsonData.conversation_state[i].conversation_state.event.length; j++)
         {
             var message = {};
-            
             message.sender = getName(jsonData.conversation_state[i].conversation_state.event[j].sender_id.gaia_id, conversation.participants);
             message.unixtime = Math.floor(jsonData.conversation_state[i].conversation_state.event[j].timestamp/1000000);
-            if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment !== undefined)
-            {//if it's a normal hangouts message
-                
-                var content ="";
-                for (var k = 0; k < jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment.length; k++)
-                {
-                    //console.log("Message: "+jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment[k].text);
-                    content += jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment[k].text;
+            if(jsonData.conversation_state[i].conversation_state.event[j].chat_message !== undefined)
+            {//if it's a message (normal hangouts, image...)
+                if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment !== undefined)
+                {//if it's a normal hangouts message
+                    
+                    var content ="";
+                    for (var k = 0; k < jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment.length; k++)
+                    {
+                        //console.log("Message: "+jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment[k].text);
+                        content += jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment[k].text;
+                    }
+                    message.content = content;
                 }
-                message.content = content;
-            }
-            
-            
-            else if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment !== undefined)
-            {//if it's an image
                 
-                for (var k = 0; k < jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment.length; k++)
-                {
-                    message.content = jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[k].embed_item["embeds.PlusPhoto.plus_photo"].url
+                else if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment !== undefined)
+                {//if it's an image
+                    
+                    for (var k = 0; k < jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment.length; k++)
+                    {
+                        message.content = jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[k].embed_item["embeds.PlusPhoto.plus_photo"].url
+                    }
+                }
+                
+                else
+                {//if we don't recognise the format of the message
+                    console.warn("%c Unknown format for conversation "+i+" message "+j+"", "background: #FF0000")
+                    console.dir(jsonData.conversation_state[i].conversation_state.event[j]);
+                    message.content = "Unknown format, unable to parse message "+j+" in conversation "+i;
                 }
             }
-            
-            else
-            {
-                console.warn("%c Unknown format for conversation "+i+" message "+j+"", "background: #FF0000");
-                message.content = "Unknown format, unable to parse message "+j+" in conversation "+i;
+            else if (jsonData.conversation_state[i].conversation_state.event[j].conversation_rename)
+            {//else if it's renaming the group
+                message.content = "Changed group chat name to "+jsonData.conversation_state[i].conversation_state.event[j].conversation_rename.new_name;
             }
+            else 
+            {//if it's not a message or renaming the group
+               console.warn("%c Unknown format for conversation "+i+" message "+j+"", "background: #FF0000");
+               console.dir(jsonData.conversation_state[i].conversation_state.event[j]);
+               message.content = "Unknown format, unable to parse message "+j+" in conversation "+i; 
+            }
+            
             conversation.messages.push(message);
         }
         conversation.messages.sort(function(a, b) 
@@ -119,7 +132,7 @@ function getName(id, participants)
         }
     }
     console.warn("Name not found for "+id+" in");
-    console.dir(participants);
+    //console.dir(participants);
     return id;
 }
 
@@ -135,6 +148,7 @@ function toTxt()
         {
             conversation.participants[k] = simpleJson[i].participants[k].name;
         }
+        conversation.name = nameFile(i, conversation.participants);
         conversation.messages = "";
         for (var j=0;j< simpleJson[i].messages.length; j++)
         {
@@ -144,7 +158,7 @@ function toTxt()
         files.push(conversation);
        
     }
-    console.dir(files);
+    //console.dir(files);
     angular.element(document.getElementById('body')).scope().showFiles();
 }
 
@@ -160,6 +174,7 @@ function toCsv()
         {
             conversation.participants[k] = simpleJson[i].participants[k].name;
         }
+        conversation.name = nameFile(i, conversation.participants);
         conversation.messages = "";
         for (var j=0;j< simpleJson[i].messages.length; j++)
         {
@@ -169,7 +184,7 @@ function toCsv()
         files.push(conversation);
        
     }
-    console.dir(files);
+    //console.dir(files);
     angular.element(document.getElementById('body')).scope().showFiles();
 }
 
@@ -178,6 +193,23 @@ function unixToReadable(unix)
     var d = new Date(0); //0 means it sets the date to the epoch
     d.setUTCSeconds(unix);
     return(d.toLocaleTimeString() +", "+ d.toDateString());
+}
+
+function nameFile(i, participants)
+{
+    //console.dir(file);
+    console.dir(jsonData.conversation_state[i].conversation_state.conversation.id);
+    if ((jsonData.conversation_state[i].conversation_state.conversation.name !== undefined)&&
+        (jsonData.conversation_state[i].conversation_state.conversation.name != ""))
+    {
+        console.log("name= "+jsonData.conversation_state[i].conversation_state.conversation.name);
+        return jsonData.conversation_state[i].conversation_state.conversation.name;
+    }
+    var part1 = participants.shift();//takes out first entry in array, the person's name
+    var name = participants.toString();
+    participants.unshift(part1);//Puts back the person's name as the first entry
+    console.log("name= "+name);
+    return name;
 }
 
 function downloadJson()
@@ -203,7 +235,6 @@ function download(filename, text) {
 var hangons = angular.module('hangons', []);
 hangons.controller('mainController', function ($scope)
 {
-		
     $scope.showFiles=function()
     {
         $scope.angFiles = files;
@@ -222,4 +253,3 @@ hangons.controller('mainController', function ($scope)
 });
 
 window.onload = setUp;
-//As seen on http://stackoverflow.com/questions/2897619/using-html5-javascript-to-generate-and-save-a-file
