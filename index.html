@@ -100,8 +100,9 @@
         <hr>
         <span ng-repeat="file in angFiles track by $index">
             <span class="fileButton">
-			<a href="#" class="btn btn-default colouredButton fileButton" ng-click="angDownload(file.participants+file.type, file.messages )"> {{file.participants.toString()+file.type}}</a>
-		    <span>
+			<a href="#" class="btn btn-default colouredButton fileButton" ng-click="angDownload(file.name+file.type, file.messages )"> {{file.name+file.type}}</a>
+		    <!--<a href="#" class="btn btn-default colouredButton fileButton" ng-click="angDownload(file.participants+file.type, file.messages )"> {{file.participants.toString()+file.type}}</a>-->
+            </span>
         </span>
         <!--<span ng-click="testAngular()"> X </span>-->
     </div>
