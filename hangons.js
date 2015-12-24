@@ -40,13 +40,16 @@ function parseData()
     for (var i=0; i < jsonData.conversation_state.length; i++)
     {
         var conversation = {};
+        conversation.chatName = "";
         conversation.participants = getParticipants(i);
         conversation.messages = [];
         
         for(var j=0; j < jsonData.conversation_state[i].conversation_state.event.length; j++)
         {
             var message = {};
-            message.sender = getName(jsonData.conversation_state[i].conversation_state.event[j].sender_id.gaia_id, conversation.participants);
+            message.sender = {};
+            message.sender.name = getName(jsonData.conversation_state[i].conversation_state.event[j].sender_id.gaia_id, conversation.participants);
+            message.sender.id = jsonData.conversation_state[i].conversation_state.event[j].sender_id.gaia_id;
             message.unixtime = Math.floor(jsonData.conversation_state[i].conversation_state.event[j].timestamp/1000000);
             if(jsonData.conversation_state[i].conversation_state.event[j].chat_message !== undefined)
             {//if it's a message (normal hangouts, image...)
@@ -96,6 +99,7 @@ function parseData()
             return parseFloat(a.unixtime) - parseFloat(b.unixtime);
         });
         simpleJson.push(conversation);
+        simpleJson[i].chatName = nameFile(i);
     }
     //console.dir(simpleJson);
     files = [];
@@ -150,7 +154,7 @@ function toTxt()
         conversation.messages = "";
         for (var j=0;j< simpleJson[i].messages.length; j++)
         {
-            conversation.messages += simpleJson[i].messages[j].sender +" at "+unixToReadable(simpleJson[i].messages[j].unixtime)+
+            conversation.messages += simpleJson[i].messages[j].sender.name +" at "+unixToReadable(simpleJson[i].messages[j].unixtime)+
             " sent: "+simpleJson[i].messages[j].content+"\r\n";
         }
         files.push(conversation);
@@ -171,7 +175,7 @@ function toCsv()
         conversation.messages = "";
         for (var j=0;j< simpleJson[i].messages.length; j++)
         {
-            conversation.messages += simpleJson[i].messages[j].sender +","+unixToReadable(simpleJson[i].messages[j].unixtime)+
+            conversation.messages += simpleJson[i].messages[j].sender.name +","+unixToReadable(simpleJson[i].messages[j].unixtime)+
             ","+simpleJson[i].messages[j].content+"\r\n";
         }
         files.push(conversation);
@@ -203,7 +207,7 @@ function toHtml()
         {
             conversation.messages += getLetterCircle(i,simpleJson[i].messages[j].sender) +"<div class='m "
             +getMessageClass(i,simpleJson[i].messages[j].sender)+"'>"+
-            simpleJson[i].messages[j].content+"<div class='d'>"+simpleJson[i].messages[j].sender +", "
+            simpleJson[i].messages[j].content+"<div class='d'>"+simpleJson[i].messages[j].sender.name +", "
             +unixToReadable(simpleJson[i].messages[j].unixtime)+"</div></div>"+"\r\n <div class='nl'></div>";
         }
         conversation.messages+="</body></html>";
@@ -216,18 +220,18 @@ function toHtml()
 
 function getLetterCircle(i, sender)
 {
-    var name = getName(jsonData.conversation_state[i].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id, simpleJson[i].participants)
-    if (sender === name)
+    console.log("sender.id"+sender.id);
+    console.log("jsonData"+jsonData.conversation_state[i].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id);
+    if (sender.id === jsonData.conversation_state[i].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id)
     {
         return "";
     }
-    return "<div class='c'>"+sender.charAt(0)+"</div>";
+    return "<div class='c'>"+sender.name.charAt(0)+"</div>";
 }
 
 function getMessageClass(i, sender)
 {
-    var name = getName(jsonData.conversation_state[i].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id, simpleJson[i].participants)
-    if (sender === name)
+    if (sender.id === jsonData.conversation_state[i].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id)
     {
         return "s";
     }
@@ -243,8 +247,6 @@ function unixToReadable(unix)
 
 function nameFile(i)
 {
-    //console.dir(file);
-    //console.dir(jsonData.conversation_state[i].conversation_state.conversation.id);
     if ((jsonData.conversation_state[i].conversation_state.conversation.name !== undefined)&&
         (jsonData.conversation_state[i].conversation_state.conversation.name != ""))
     {
@@ -261,13 +263,9 @@ function nameFile(i)
             index = k;
         }
     }
-    //console.log("You are"+jsonData.conversation_state[i].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id);
-    //console.log("Right?");
     var client = participants.splice(index, 1);
-    //var part1 = participants.shift();//takes out first entry in array, the person's name
     var name = participants.toString();
     participants.splice(index, 0, client);//Puts back the person's name as the first entry
-    //console.log("name= "+name);
     return name;
 }
 
