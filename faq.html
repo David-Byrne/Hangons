@@ -1,14 +1,13 @@
 <!DOCTYPE html> <!--without this the dropdown buttons only are half height-->
 <html lang="en">
 <head>
-    <title>Hangons</title>
+    <title>Hangons FAQ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
-    <meta name="keywords" content="faq, Hangouts.json, Hangouts, json, client side">
     <meta name="description" content="Commonly asked questions about Hangons">
     <meta name="author" content="David Byrne">
     <meta name="theme-color" content="#1AA260">
-    <link rel="icon" sizes="192x192" href="images/favicon.png">
+    <link rel="icon" sizes="192x192" type="image/png" href="images/favicon.png">
     
 	<script src="https://bootswatch.com/bower_components/jquery/dist/jquery.js"></script>
 	<script src="https://bootswatch.com/bower_components/bootstrap/dist/js/bootstrap.js"></script>
@@ -19,7 +18,7 @@
 	<link rel="stylesheet" type="text/css" href="hangons.css" />
 
 </head>
-<body  ng-App="hangons" ng-controller="mainController" id="body">
+<body id="body">
     
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -30,7 +29,8 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <img src="images/Hangons3.png" class="pull-left " id="logo"><!--Source: http://romannurik.github.io/AndroidAssetStudio/ -->
+                <img src="images/Hangons3.png" class="pull-left " id="logo" alt="Smiley face"
+                ><!--Source for logo: http://romannurik.github.io/AndroidAssetStudio/ -->
                 <a class="navbar-brand" href="index.html">Hangons</a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -50,7 +50,7 @@
             <div class="panel-heading"><h5>1: Is it secure?</h5></div>
             <div class="panel-body">
                 Yes, the code all runs client-side so your data never leaves your machine. Feel free to check the source code if you
-                don't believe me or even downlaod the files and run it yourself.
+                don't believe me or even download the files and run it yourself.
             </div>
         </div>
         <div class="panel panel-default text-left">
@@ -78,9 +78,10 @@
         <div class="panel panel-default text-left">
             <div class="panel-heading"><h5>5: What do the class names mean in the HTML file?</h5></div>
             <div class="panel-body">
-                To reduce file size, the css styles in the HTML format are shortened to abbreviations. They are: m for messages, s for
-                sent messages, r for received messages, d for message details (sender and time), c for the circle next to the sender's
-                name and nl for the new line that forces messages to appear below the last sent message.
+                To reduce file size, the <abbr title="Cascading Style Sheets">CSS</abbr> styles in the HTML format are shortened to 
+                abbreviations. They are: m for messages, s for sent messages, r for received messages, d for message details 
+                (sender and time), c for the circle next to the sender's name and nl for the new line that forces messages to appear 
+                below the last sent message.
             </div>
         </div>
     </div>
