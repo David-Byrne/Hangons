@@ -98,6 +98,7 @@ function parseData()
         simpleJson.push(conversation);
     }
     //console.dir(simpleJson);
+    files = [];
     document.getElementById("jsonBtn").className = "btn btn-default colouredButton";
     document.getElementById("txtBtn").className = "btn btn-default colouredButton";
     document.getElementById("csvBtn").className = "btn btn-default colouredButton";
@@ -134,7 +135,7 @@ function getName(id, participants)
         }
     }
     console.warn("Name not found for "+id+" in");
-    //console.dir(participants);
+    console.dir(participants);
     return id;
 }
 
@@ -215,7 +216,8 @@ function toHtml()
 
 function getLetterCircle(i, sender)
 {
-    if (sender === simpleJson[i].participants[0].name)
+    var name = getName(jsonData.conversation_state[i].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id, simpleJson[i].participants)
+    if (sender === name)
     {
         return "";
     }
@@ -224,9 +226,8 @@ function getLetterCircle(i, sender)
 
 function getMessageClass(i, sender)
 {
-    //console.dir(sender)
-    //console.dir(simpleJson[i].participants[0]);
-    if (sender === simpleJson[i].participants[0].name)
+    var name = getName(jsonData.conversation_state[i].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id, simpleJson[i].participants)
+    if (sender === name)
     {
         return "s";
     }
@@ -251,13 +252,21 @@ function nameFile(i)
         return jsonData.conversation_state[i].conversation_state.conversation.name;
     }
     var participants = [];
+    var index;
     for (var k=0; k < simpleJson[i].participants.length; k++)
     {
         participants[k] = simpleJson[i].participants[k].name;
+        if (simpleJson[i].participants[k].id === jsonData.conversation_state[i].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id)
+        {
+            index = k;
+        }
     }
-    var part1 = participants.shift();//takes out first entry in array, the person's name
+    //console.log("You are"+jsonData.conversation_state[i].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id);
+    //console.log("Right?");
+    var client = participants.splice(index, 1);
+    //var part1 = participants.shift();//takes out first entry in array, the person's name
     var name = participants.toString();
-    participants.unshift(part1);//Puts back the person's name as the first entry
+    participants.splice(index, 0, client);//Puts back the person's name as the first entry
     //console.log("name= "+name);
     return name;
 }
