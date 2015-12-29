@@ -1,5 +1,6 @@
-<!DOCTYPE html> <!--without this the dropdown buttons only are half height-->
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Hangons - A Hangouts.json parser</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,17 +9,19 @@
     <meta name="author" content="David Byrne">
     <meta name="theme-color" content="#1AA260">
     <link rel="icon" sizes="192x192" type="image/png" href="images/favicon.png">
-    
-	<script src="https://bootswatch.com/bower_components/jquery/dist/jquery.js"></script>
-	<script src="https://bootswatch.com/bower_components/bootstrap/dist/js/bootstrap.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/paper/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="hangons.css" />
+
+    <script src="https://bootswatch.com/bower_components/jquery/dist/jquery.js"></script>
+    <script src="https://bootswatch.com/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
     <script src="hangons.js"></script>
-    
-	<link rel="stylesheet" type="text/css" href="https://bootswatch.com/paper/bootstrap.css" />
-	<link rel="stylesheet" type="text/css" href="hangons.css" />
+
 </head>
-<body  ng-App="hangons" ng-controller="mainController" id="body">
-    
+
+<body ng-App="hangons" ng-controller="mainController" id="body">
+
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -36,30 +39,29 @@
                 <ul class="nav navbar-nav">
                     <li><a href="faq.html">FAQ</a></li>
                 </ul>
-            
+
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="https://github.com/David-Byrne/Hangons">Github</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-    
-	<div id="mainContent">
-	    First go to <a href="https://takeout.google.com/settings/takeout"  target="_blank">Google Takeout</a> and download your 
-        hangouts data. Extract the Hangouts.json file from the zip and upload it here.
-	
+
+    <div id="mainContent">
+        First go to <a href="https://takeout.google.com/settings/takeout" target="_blank">Google Takeout</a> and download
+        your hangouts data. Extract the Hangouts.json file from the zip and upload it here.
+
         <span class="input-group-btn">
             <span class="btn btn-default btn-file colouredButton">
                 Browse<input type="file"  id="fileinput">
                 <input type="text" class="form-control brightText" disabled="" id="fileNameTextBox" readonly>
             </span>
         </span>
-        
-        <hr>
-        
-        Now choose what format you'd like it in. The dropdown box gives more information about the file types.<br>
+
+        <hr> Now choose what format you'd like it in. The dropdown box gives more information about the file types.
+        <br>
         <div class="btn-group spacedButton">
-            <a href="#" class="btn btn-default disabled colouredButton" id="jsonBtn" >Simplified JSON</a>
+            <a href="#" class="btn btn-default disabled colouredButton" id="jsonBtn">Simplified JSON</a>
             <a href="#" class="btn btn-default dropdown-toggle colouredButton dropdown" data-toggle="dropdown" aria-expanded="false"><span class="caret brightText"></span></a>
             <span class="dropdown-menu dataDescription">
                 <span  class="dataDescription">
@@ -76,7 +78,7 @@
                 A plain .txt file with the sender, time, date and content with one message's attributes per line.
             </span>
         </div>
-        
+
         <div class="btn-group spacedButton">
             <a href="#" class="btn btn-default disabled colouredButton" id="csvBtn">Comma Separated Value</a>
             <a href="#" class="btn btn-default dropdown-toggle colouredButton dropdown" data-toggle="dropdown" aria-expanded="false"><span class="caret brightText"></span></a>
@@ -84,7 +86,7 @@
                 A .csv file with the sender, time, date and content separated with commas. One message is printed per line.
             </span>
         </div>
-        
+
         <div class="btn-group spacedButton">
             <a href="#" class="btn btn-default disabled colouredButton" id="htmlBtn">HTML</a>
             <a href="#" class="btn btn-default dropdown-toggle colouredButton dropdown" data-toggle="dropdown" aria-expanded="false"><span class="caret  brightText"></span></a>
@@ -94,14 +96,13 @@
         </div>
 
         <hr>
-        
+
         <span ng-repeat="file in angFiles track by $index">
             <span class="fileButton">
 			<a href="#" class="btn btn-default colouredButton fileButton" ng-click="angDownload(file.name+file.type, file.messages )"> {{file.name+file.type}}</a>
-		    <!--<a href="#" class="btn btn-default colouredButton fileButton" ng-click="angDownload(file.participants+file.type, file.messages )"> {{file.participants.toString()+file.type}}</a>-->
             </span>
         </span>
-        <!--<span ng-click="testAngular()"> X </span>-->
     </div>
 </body>
+
 </html>
