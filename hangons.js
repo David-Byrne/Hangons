@@ -2,7 +2,6 @@ var jsonData;
 var simpleJson = [];
 var files = [];
 
-
 function setUp()
 {
 	document.getElementById('fileinput').addEventListener('change', readFile, false);
@@ -12,7 +11,8 @@ function setUp()
     document.getElementById('htmlBtn').onclick = toHtml;
 }
 
-function readFile(evt) {
+function readFile(evt) 
+{
     //Retrieve all the files from the FileList object
 	var files = evt.target.files; 
 	document.getElementById("fileNameTextBox").value = files[0].name;
@@ -20,7 +20,6 @@ function readFile(evt) {
 	{
 		var reader = new FileReader();
 		reader.readAsText(files[0]);
-		
 		reader.onload = function() 
 		{
 			jsonData = JSON.parse(reader.result);
@@ -67,7 +66,6 @@ function parseData()
                 
                 else if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment !== undefined)
                 {//if it's an image
-                    
                     for (var k = 0; k < jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment.length; k++)
                     {
                         message.content = jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[k].embed_item["embeds.PlusPhoto.plus_photo"].url
@@ -113,7 +111,6 @@ function parseData()
         simpleJson.push(conversation);
         simpleJson[i].chatName = nameFile(i);
     }
-    //console.dir(simpleJson);
     files = [];
     document.getElementById("jsonBtn").className = "btn btn-default colouredButton";
     document.getElementById("txtBtn").className = "btn btn-default colouredButton";
@@ -170,9 +167,7 @@ function toTxt()
             " sent: "+simpleJson[i].messages[j].content+"\r\n";
         }
         files.push(conversation);
-       
     }
-    //console.dir(files);
     angular.element(document.getElementById('body')).scope().showFiles();
 }
 
@@ -191,9 +186,7 @@ function toCsv()
             ","+simpleJson[i].messages[j].content+"\r\n";
         }
         files.push(conversation);
-       
     }
-    //console.dir(files);
     angular.element(document.getElementById('body')).scope().showFiles();
 }
 
@@ -224,9 +217,8 @@ function toHtml()
         }
         conversation.messages+="</body></html>";
         files.push(conversation);
-       
     }
-    //console.dir(files);
+
     angular.element(document.getElementById('body')).scope().showFiles();
 }
 
