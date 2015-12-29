@@ -85,6 +85,18 @@ function parseData()
             {//else if it's renaming the group
                 message.content = "Changed group chat name to "+jsonData.conversation_state[i].conversation_state.event[j].conversation_rename.new_name;
             }
+            else if (jsonData.conversation_state[i].conversation_state.event[j].hangout_event)
+            {//else if it's a call using gangouts
+                //message.content = "Changed group chat name to "+jsonData.conversation_state[i].conversation_state.event[j].conversation_rename.new_name;
+                if (jsonData.conversation_state[i].conversation_state.event[j].hangout_event.event_type === "START_HANGOUT")
+                {
+                    message.content = "Started a Hangout";
+                }
+                else if (jsonData.conversation_state[i].conversation_state.event[j].hangout_event.event_type === "END_HANGOUT")
+                {
+                    message.content = "Ended a Hangout";
+                }
+            }
             else 
             {//if it's not a message or renaming the group
                console.warn("%c Unknown format for conversation "+i+" message "+j+"", "background: #FF0000");
