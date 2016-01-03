@@ -34,13 +34,11 @@
                 <img src="images/Hangons3.png" class="pull-left " id="logo" alt="Hangons Logo">
                 <!--Source for logo: http://romannurik.github.io/AndroidAssetStudio/ -->
                 <a class="navbar-brand" href="index.html">Hangons</a>
+                <p class="navbar-text hidden-xs">A clientside hangouts.json parser</p>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li><a href="faq.html">FAQ</a></li>
-                </ul>
-
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a href="faq.html">FAQ</a></li>
                     <li><a href="https://github.com/David-Byrne/Hangons">Github</a></li>
                 </ul>
             </div>
@@ -73,7 +71,7 @@
 
         <div class="btn-group spacedButton">
             <a href="#" class="btn btn-default disabled colouredButton" id="txtBtn">Plain Text</a>
-            <a href="#" class="btn btn-default dropdown-toggle colouredButton  dropdown" data-toggle="dropdown" aria-expanded="false"><span class="caret brightText"></span></a>
+            <a href="#" class="btn btn-default dropdown-toggle colouredButton dropdown" data-toggle="dropdown" aria-expanded="false"><span class="caret brightText"></span></a>
             <span class="dropdown-menu dataDescription">
                 A plain .txt file with the sender, time, date and content with one message's attributes per line.
             </span>
@@ -96,9 +94,11 @@
         </div>
 
         <hr>
-
-        <span ng-repeat="file in angFiles track by $index">
-            <span class="fileButton">
+        <div class="navbar-form form-group center-block" ng-hide="angFiles === undefined || angFiles.length === 0">
+            <input type="text" placeholder="Search by Name" class="form-control" id="inputDefault" ng-model="query">
+        </div>
+        <span ng-repeat="file in angFiles track by $index" >
+            <span class="fileButton" ng-hide="file.name.toUpperCase().search(query.toUpperCase()) === -1">
 			<a href="#" class="btn btn-default colouredButton fileButton" ng-click="angDownload(file.name+file.type, file.messages )"> {{file.name+file.type}}</a>
             </span>
         </span>

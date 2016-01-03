@@ -4,7 +4,7 @@ var files = [];
 
 function setUp()
 {
-	document.getElementById('fileinput').addEventListener('change', readFile, false);
+    document.getElementById('fileinput').addEventListener('change', readFile, false);
     document.getElementById('jsonBtn').onclick = downloadJson;
     document.getElementById('txtBtn').onclick = toTxt;
     document.getElementById('csvBtn').onclick = toCsv;
@@ -14,23 +14,23 @@ function setUp()
 function readFile(evt) 
 {
     //Retrieve all the files from the FileList object
-	var files = evt.target.files; 
-	document.getElementById("fileNameTextBox").value = files[0].name;
-	if (files) 
-	{
-		var reader = new FileReader();
-		reader.readAsText(files[0]);
-		reader.onload = function() 
-		{
-			jsonData = JSON.parse(reader.result);
-            //console.log("Name: "+files[0].name);
-			//console.log("Size: "+files[0].size+" Bytes");
-			parseData();
-		}
-	}
-	else 
+    var files = evt.target.files; 
+    document.getElementById("fileNameTextBox").value = files[0].name;
+    if (files) 
     {
-	      console.error("Failed to load files"); 
+        var reader = new FileReader();
+        reader.readAsText(files[0]);
+        reader.onload = function() 
+        {
+            jsonData = JSON.parse(reader.result);
+            //console.log("Name: "+files[0].name);
+            //console.log("Size: "+files[0].size+" Bytes");
+            parseData();
+        }
+    }
+    else 
+    {   
+        console.error("Failed to load files"); 
     }
 }
 
