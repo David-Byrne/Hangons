@@ -14,6 +14,8 @@ function setUp()
 function readFile(evt) 
 {
     //Retrieve all the files from the FileList object
+    document.getElementById("cannotParseAlert").className = "row hidden";
+    
     var files = evt.target.files; 
     document.getElementById("fileNameTextBox").value = files[0].name;
     if (files) 
@@ -22,10 +24,34 @@ function readFile(evt)
         reader.readAsText(files[0]);
         reader.onload = function() 
         {
-            jsonData = JSON.parse(reader.result);
-            //console.log("Name: "+files[0].name);
-            //console.log("Size: "+files[0].size+" Bytes");
-            parseData();
+            try 
+            {
+                jsonData = JSON.parse(reader.result);
+                parseData();
+            } 
+            catch (err) 
+            {
+                if (files[0].name === "Hangouts.json")
+                {
+                    if (err.__proto__.name === "SyntaxError")
+                    {
+                        document.getElementById("cannotParseAlertDes").innerText = "The Hangouts.json file seems to "+
+                        "contain invalid JSON. Perhaps try download it from Google takeout again?";
+                    }
+                    else
+                    {
+                        document.getElementById("cannotParseAlertDes").innerHTML = "The Hangouts.json file contains data which "+
+                        "cannot be read. If you could copy the error code: <br> err.message <br>and report it "+
+                        "<a href='https://docs.google.com/forms/d/1YEmJ5ScZbtJ6_U6RtpCLdhoSZs1i6kMipM0jVOBQnpc/viewform?usp=send_form'>"+
+                        "here</a> I will try fix it.";
+                    }
+                }
+                else
+                {
+                    document.getElementById("cannotParseAlertDes").innerText = "Are you sure it was the Hangouts.json file you chose?";
+                }
+                document.getElementById("cannotParseAlert").className = "row";
+            }
         }
     }
     else 
