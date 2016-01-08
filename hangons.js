@@ -15,6 +15,7 @@ function readFile(evt)
 {
     //Retrieve all the files from the FileList object
     document.getElementById("cannotParseAlert").className = "row hidden";
+    document.getElementById("parseBar").style.width = "0%";
     
     var files = evt.target.files; 
     document.getElementById("fileNameTextBox").value = files[0].name;
@@ -31,6 +32,7 @@ function readFile(evt)
             } 
             catch (err) 
             {
+                console.warn(err);
                 if (files[0].name === "Hangouts.json")
                 {
                     if (err.__proto__.name === "SyntaxError")
@@ -62,6 +64,7 @@ function readFile(evt)
 
 function parseData()
 {
+    var progress = 0;
     for (var i=0; i < jsonData.conversation_state.length; i++)
     {
         var conversation = {};
@@ -127,8 +130,9 @@ function parseData()
                console.dir(jsonData.conversation_state[i].conversation_state.event[j]);
                message.content = "Unknown format, unable to parse message "+j+" in conversation "+i; 
             }
-            
             conversation.messages.push(message);
+            progress += ((1/jsonData.conversation_state.length)*(1/jsonData.conversation_state[i].conversation_state.event.length)*100);
+            document.getElementById("parseBar").style.width = Math.floor(progress)+"%";
         }
         conversation.messages.sort(function(a, b) 
         {
@@ -142,6 +146,7 @@ function parseData()
     document.getElementById("txtBtn").className = "btn btn-default colouredButton";
     document.getElementById("csvBtn").className = "btn btn-default colouredButton";
     document.getElementById("htmlBtn").className = "btn btn-default colouredButton";
+    document.getElementById("parseBar").style.width = "100%";
 }
 
 function getParticipants(index)
@@ -181,6 +186,8 @@ function getName(id, participants)
 function toTxt()
 {
     files = [];
+    document.getElementById("toFileBar").style.width = "0%";
+    var progress = 0;
     for (var i=0; i < simpleJson.length; i++)
     {
         var conversation = {};
@@ -191,15 +198,20 @@ function toTxt()
         {
             conversation.messages += simpleJson[i].messages[j].sender.name +" at "+unixToReadable(simpleJson[i].messages[j].unixtime)+
             " sent: "+simpleJson[i].messages[j].content+"\r\n";
+            progress += (1/simpleJson.length)*(1/simpleJson[i].messages.length)*100;
+            document.getElementById("toFileBar").style.width = Math.floor(progress)+"%";
         }
         files.push(conversation);
     }
     angular.element(document.getElementById('body')).scope().showFiles();
+    document.getElementById("toFileBar").style.width = "100%";
 }
 
 function toCsv()
 {
     files = [];
+    document.getElementById("toFileBar").style.width = "0%";
+    var progress = 0;
     for (var i=0; i < simpleJson.length; i++)
     {
         var conversation = {};
@@ -210,15 +222,20 @@ function toCsv()
         {
             conversation.messages += simpleJson[i].messages[j].sender.name +","+unixToReadable(simpleJson[i].messages[j].unixtime)+
             ","+simpleJson[i].messages[j].content+"\r\n";
+            progress += (1/simpleJson.length)*(1/simpleJson[i].messages.length)*100;
+            document.getElementById("toFileBar").style.width = Math.floor(progress)+"%";
         }
         files.push(conversation);
     }
     angular.element(document.getElementById('body')).scope().showFiles();
+    document.getElementById("toFileBar").style.width = "100%";
 }
 
 function toHtml()
 {
     files = [];
+    document.getElementById("toFileBar").style.width = "0%";
+    var progress = 0;
     for (var i=0; i < simpleJson.length; i++)
     {
         var conversation = {};
@@ -240,18 +257,19 @@ function toHtml()
             +getMessageClass(i,simpleJson[i].messages[j].sender)+"'>"+
             simpleJson[i].messages[j].content+"<div class='d'>"+simpleJson[i].messages[j].sender.name +", "
             +unixToReadable(simpleJson[i].messages[j].unixtime)+"</div></div>"+"\r\n <div class='nl'></div>";
+            
+            progress += (1/simpleJson.length)*(1/simpleJson[i].messages.length)*100;
+            document.getElementById("toFileBar").style.width = Math.floor(progress)+"%";
         }
         conversation.messages+="</body></html>";
         files.push(conversation);
     }
-
     angular.element(document.getElementById('body')).scope().showFiles();
+    document.getElementById("toFileBar").style.width = "100%";
 }
 
 function getLetterCircle(i, sender)
 {
-    console.log("sender.id"+sender.id);
-    console.log("jsonData"+jsonData.conversation_state[i].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id);
     if (sender.id === jsonData.conversation_state[i].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id)
     {
         return "";

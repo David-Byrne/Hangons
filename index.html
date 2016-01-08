@@ -69,9 +69,16 @@
                 </div>
             </div>
         </div>
-
+        
+        <br>
         <div class="row">
-            <hr> Now choose what format you'd like it in. The dropdown box gives more information about the file types.
+            <div class="progress">
+                <div id = "parseBar" class="progress-bar colouredProgressBar" style="width: 0%;"></div>
+            </div>
+        </div>
+        
+        <div class="row">
+            Now choose what format you'd like it in. The dropdown box gives more information about the file types.
             <br>
             <div class="btn-group spacedButton">
                 <a href="#" class="btn btn-default disabled colouredButton" id="jsonBtn">Simplified JSON</a>
@@ -107,8 +114,16 @@
                     A <abbr title="Hyper Text Markup Language">HTML</abbr> file with the messages styled like the hangouts interface you're used to.
                 </span>
             </div>
+        </div>
+        
+        <br>
+        <div class="row">
+            <div class="progress">
+                <div id = "toFileBar" class="progress-bar colouredProgressBar" style="width: 0%;"></div>
+            </div>
+        </div>
 
-            <hr>
+        <div class="row">
             <div class="navbar-form form-group center-block" ng-hide="angFiles === undefined || angFiles.length === 0">
                 <input type="text" placeholder="Search by Name" class="form-control" id="inputDefault" ng-model="query">
             </div>

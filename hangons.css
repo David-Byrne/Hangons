@@ -87,3 +87,12 @@
     background-color: #168851 !important;
     color: white;
 }
+
+.colouredProgressBar
+{
+    background-color: #1AA260;
+}
+.colouredProgressBar:last-child:before
+{
+    background-color: #EBEBE4
+}
