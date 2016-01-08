@@ -15,6 +15,7 @@ function readFile(evt)
 {
     //Retrieve all the files from the FileList object
     document.getElementById("cannotParseAlert").className = "row hidden";
+    document.getElementById("unknownMessageAlert").className = "row hidden";
     document.getElementById("parseBar").style.width = "0%";
     
     var files = evt.target.files; 
@@ -87,7 +88,6 @@ function parseData()
                     var content ="";
                     for (var k = 0; k < jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment.length; k++)
                     {
-                        //console.log("Message: "+jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment[k].text);
                         content += jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment[k].text;
                     }
                     message.content = content;
@@ -106,6 +106,7 @@ function parseData()
                     console.warn("%c Unknown format for conversation "+i+" message "+j+"", "background: #FF0000")
                     console.dir(jsonData.conversation_state[i].conversation_state.event[j]);
                     message.content = "Unknown format, unable to parse message "+j+" in conversation "+i;
+                    document.getElementById("unknownMessageAlert").className = "row";
                 }
             }
             else if (jsonData.conversation_state[i].conversation_state.event[j].conversation_rename)
@@ -114,7 +115,6 @@ function parseData()
             }
             else if (jsonData.conversation_state[i].conversation_state.event[j].hangout_event)
             {//else if it's a call using gangouts
-                //message.content = "Changed group chat name to "+jsonData.conversation_state[i].conversation_state.event[j].conversation_rename.new_name;
                 if (jsonData.conversation_state[i].conversation_state.event[j].hangout_event.event_type === "START_HANGOUT")
                 {
                     message.content = "Started a Hangout";
@@ -128,7 +128,8 @@ function parseData()
             {//if it's not a message or renaming the group
                console.warn("%c Unknown format for conversation "+i+" message "+j+"", "background: #FF0000");
                console.dir(jsonData.conversation_state[i].conversation_state.event[j]);
-               message.content = "Unknown format, unable to parse message "+j+" in conversation "+i; 
+               message.content = "Unknown format, unable to parse message "+j+" in conversation "+i;
+               document.getElementById("unknownMessageAlert").className = "row";
             }
             conversation.messages.push(message);
             progress += ((1/jsonData.conversation_state.length)*(1/jsonData.conversation_state[i].conversation_state.event.length)*100);
@@ -298,7 +299,6 @@ function nameFile(i)
     if ((jsonData.conversation_state[i].conversation_state.conversation.name !== undefined)&&
         (jsonData.conversation_state[i].conversation_state.conversation.name != ""))
     {
-        //console.log("name= "+jsonData.conversation_state[i].conversation_state.conversation.name);
         return jsonData.conversation_state[i].conversation_state.conversation.name;
     }
     var participants = [];
@@ -313,13 +313,15 @@ function nameFile(i)
     }
     var client = participants.splice(index, 1);
     var name = participants.toString();
-    participants.splice(index, 0, client);//Puts back the person's name as the first entry
+    participants.splice(index, 0, client);//Puts the person's name back into the array
     return name;
 }
 
 function downloadJson()
 {
+    document.getElementById("toFileBar").style.width = "0%";
     download("hangons.json", JSON.stringify(simpleJson, null, "\t"));
+    document.getElementById("toFileBar").style.width = "100%";
 }
 
 function download(filename, text) {
