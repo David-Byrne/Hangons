@@ -94,10 +94,17 @@ function parseData()
                 }
                 
                 else if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment !== undefined)
-                {//if it's an image
+                {
                     for (var k = 0; k < jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment.length; k++)
                     {
-                        message.content = jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[k].embed_item["embeds.PlusPhoto.plus_photo"].url
+                        //image
+                        if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment.type == "PLUS_PHOTO")
+                                message.content = jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[k].embed_item["embeds.PlusPhoto.plus_photo"].url
+                        //audio
+                        else if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment.type == "PLUS_AUDIO_V2")
+                                message.content = jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[k].embed_item["embeds.PlusAudioV2.plus_audio_v2"].url
+
+
                     }
                 }
                 
