@@ -332,18 +332,13 @@ function downloadJson()
 }
 
 function download(filename, text) {
-    var ele = document.createElement('a');
-    ele.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    ele.setAttribute('download', filename);
+    var a = window.document.createElement('a');
+    a.href = window.URL.createObjectURL(new Blob([text], {type: 'text/plain'}));
+    a.download = filename;
 
-    if (document.createEvent) {
-        var event = document.createEvent('MouseEvents');
-        event.initEvent('click', true, true);
-        ele.dispatchEvent(event);
-    }
-    else {
-        ele.click();
-    }
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 
 var hangons = angular.module('hangons', []);
