@@ -98,13 +98,12 @@ function parseData()
                     for (var k = 0; k < jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment.length; k++)
                     {
                         //image
-                        if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment.type == "PLUS_PHOTO")
-                                message.content = jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[k].embed_item["embeds.PlusPhoto.plus_photo"].url
+                        if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[0].embed_item.type[0] == "PLUS_PHOTO")
+                            message.content = jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[k].embed_item["embeds.PlusPhoto.plus_photo"].url
                         //audio
                         else if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment.type == "PLUS_AUDIO_V2")
-                                message.content = jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[k].embed_item["embeds.PlusAudioV2.plus_audio_v2"].url
-
-
+                            message.content = jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[k].embed_item["embeds.PlusAudioV2.plus_audio_v2"].url
+                        else console.warn("Attachment detected that couldn't be parsed");
                     }
                 }
                 
