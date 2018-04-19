@@ -10,11 +10,11 @@
     <meta name="theme-color" content="#1AA260">
     <link rel="icon" sizes="192x192" type="image/png" href="images/favicon.png">
 
-    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/paper/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/3/paper/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="hangons.css" />
 
-    <script src="https://bootswatch.com/bower_components/jquery/dist/jquery.js"></script>
-    <script src="https://bootswatch.com/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="https://bootswatch.com/3/bower_components/jquery/dist/jquery.js"></script>
+    <script src="https://bootswatch.com/3/bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
     <script src="hangons.js"></script>
 
@@ -58,7 +58,7 @@
                 </span>
             </span>
         </div>
-        
+
         <div id="cannotParseAlert" class="row hidden">
             <br>
             <div class="col-sm-offset-3 col-sm-6 col-md-offset-4 col-md-4 col-lg-offset-4 col-lg-4">
@@ -69,29 +69,29 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="unknownMessageAlert" class="row hidden">
             <br>
             <div class="col-sm-offset-3 col-sm-6 col-md-offset-4 col-md-4 col-lg-offset-4 col-lg-4">
                 <div class="alert alert-dismissible alert-warning">
                     <button type="button" class="close" data-dismiss="alert">&#10006;</button>
                     <strong>Certain messages were not recorded</strong>
-                    <p>We didn't recognise the format of some of the message(s) so they couldn't be backed up. 
+                    <p>We didn't recognise the format of some of the message(s) so they couldn't be backed up.
                         If you report the console messages (f12)
                         <a href='https://docs.google.com/forms/d/1YEmJ5ScZbtJ6_U6RtpCLdhoSZs1i6kMipM0jVOBQnpc/viewform?usp=send_form'>
                         here</a> I will try fix the issue.
                     </p>
                 </div>
             </div>
-        </div>  
-         
+        </div>
+
         <br>
         <div class="row">
             <div class="progress">
                 <div id = "parseBar" class="progress-bar colouredProgressBar" style="width: 0%;"></div>
             </div>
         </div>
-        
+
         <div class="row">
             Now choose what format you'd like it in. The dropdown box gives more information about the file types.
             <br>
@@ -100,7 +100,7 @@
                 <a href="#" class="btn btn-default dropdown-toggle colouredButton dropdown" data-toggle="dropdown" aria-expanded="false"><span class="caret brightText"></span></a>
                 <span class="dropdown-menu dataDescription">
                     <span  class="dataDescription">
-                    <abbr title="JavaScript Object Natation">JSON</abbr> array of conversation objects and each conversation contains an array of participants and an 
+                    <abbr title="JavaScript Object Natation">JSON</abbr> array of conversation objects and each conversation contains an array of participants and an
                     array of message objects. Each message object has a sender, time and content attribute.
                     </span>
                 </span>
@@ -130,7 +130,7 @@
                 </span>
             </div>
         </div>
-        
+
         <br>
         <div class="row">
             <div class="progress">
