@@ -5,7 +5,7 @@ It's got a clean and modern look with a responsive design that looks well on any
 creating an intuitive user experience
 ![Homescreen](https://raw.githubusercontent.com/David-Byrne/Hangons/master/images/homescreen.png)
 
-#####Getting Started
+#### Getting Started
 First go to [Google takeout](https://takeout.google.com/settings/takeout) and download the data associated with Hangouts.
 Unzip and extract the files from the folder. Navigate to Takeout>Hangouts>Hangouts.json and upload this file.
 
