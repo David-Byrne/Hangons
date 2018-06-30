@@ -11,27 +11,27 @@ function setUp()
     document.getElementById('htmlBtn').onclick = toHtml;
 }
 
-function readFile(evt) 
+function readFile(evt)
 {
     //Retrieve all the files from the FileList object
     document.getElementById("cannotParseAlert").className = "row hidden";
     document.getElementById("unknownMessageAlert").className = "row hidden";
     document.getElementById("parseBar").style.width = "0%";
-    
-    var files = evt.target.files; 
+
+    var files = evt.target.files;
     document.getElementById("fileNameTextBox").value = files[0].name;
-    if (files) 
+    if (files)
     {
         var reader = new FileReader();
         reader.readAsText(files[0]);
-        reader.onload = function() 
+        reader.onload = function()
         {
-            try 
+            try
             {
                 jsonData = JSON.parse(reader.result);
                 parseData();
-            } 
-            catch (err) 
+            }
+            catch (err)
             {
                 console.warn(err);
                 if (files[0].name === "Hangouts.json")
@@ -57,91 +57,91 @@ function readFile(evt)
             }
         }
     }
-    else 
-    {   
-        console.error("Failed to load files"); 
+    else
+    {
+        console.error("Failed to load files");
     }
 }
 
 function parseData()
 {
     var progress = 0;
-    for (var i=0; i < jsonData.conversation_state.length; i++)
+    for (var i=0; i < jsonData.conversations.length; i++)
     {
         var conversation = {};
         conversation.chatName = "";
         conversation.participants = getParticipants(i);
         conversation.messages = [];
-        
-        for(var j=0; j < jsonData.conversation_state[i].conversation_state.event.length; j++)
+
+        for(var j=0; j < jsonData.conversations[i].events.length; j++)
         {
             var message = {};
             message.sender = {};
-            message.sender.name = getName(jsonData.conversation_state[i].conversation_state.event[j].sender_id.gaia_id, conversation.participants);
-            message.sender.id = jsonData.conversation_state[i].conversation_state.event[j].sender_id.gaia_id;
-            message.unixtime = Math.floor(jsonData.conversation_state[i].conversation_state.event[j].timestamp/1000000);
-            if(jsonData.conversation_state[i].conversation_state.event[j].chat_message !== undefined)
+            message.sender.name = getName(jsonData.conversations[i].events[j].sender_id.gaia_id, conversation.participants);
+            message.sender.id = jsonData.conversations[i].events[j].sender_id.gaia_id;
+            message.unixtime = Math.floor(jsonData.conversations[i].events[j].timestamp/1000000);
+            if(jsonData.conversations[i].events[j].chat_message !== undefined)
             {//if it's a message (normal hangouts, image...)
-                if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment !== undefined)
+                if (jsonData.conversations[i].events[j].chat_message.message_content.segment !== undefined)
                 {//if it's a normal hangouts message
-                    
+
                     var content ="";
-                    for (var k = 0; k < jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment.length; k++)
+                    for (var k = 0; k < jsonData.conversations[i].events[j].chat_message.message_content.segment.length; k++)
                     {
-                        content += jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.segment[k].text;
+                        content += jsonData.conversations[i].events[j].chat_message.message_content.segment[k].text;
                     }
                     message.content = content;
                 }
-                
-                else if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment !== undefined)
+
+                else if (jsonData.conversations[i].events[j].chat_message.message_content.attachment !== undefined)
                 {
-                    for (var k = 0; k < jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment.length; k++)
+                    for (var k = 0; k < jsonData.conversations[i].events[j].chat_message.message_content.attachment.length; k++)
                     {
                         //image
-                        if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[0].embed_item.type[0] == "PLUS_PHOTO")
-                            message.content = jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[k].embed_item["embeds.PlusPhoto.plus_photo"].url
+                        if (jsonData.conversations[i].events[j].chat_message.message_content.attachment[0].embed_item.type[0] == "PLUS_PHOTO")
+                            message.content = jsonData.conversations[i].events[j].chat_message.message_content.attachment[k].embed_item.plus_photo.url
                         //audio
-                        else if (jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment.type == "PLUS_AUDIO_V2")
-                            message.content = jsonData.conversation_state[i].conversation_state.event[j].chat_message.message_content.attachment[k].embed_item["embeds.PlusAudioV2.plus_audio_v2"].url
+                        else if (jsonData.conversations[i].events[j].chat_message.message_content.attachment.type == "PLUS_AUDIO_V2")
+                            message.content = jsonData.conversations[i].events[j].chat_message.message_content.attachment[k].embed_item["embeds.PlusAudioV2.plus_audio_v2"].url
                         else console.warn("Attachment detected that couldn't be parsed");
                     }
                 }
-                
+
                 else
                 {//if we don't recognise the format of the message
                     console.warn("%c Unknown format for conversation "+i+" message "+j+"", "background: #FF0000")
-                    console.dir(jsonData.conversation_state[i].conversation_state.event[j]);
+                    console.dir(jsonData.conversations[i].events[j]);
                     message.content = "Unknown format, unable to parse message "+j+" in conversation "+i;
                     document.getElementById("unknownMessageAlert").className = "row";
                 }
             }
-            else if (jsonData.conversation_state[i].conversation_state.event[j].conversation_rename)
+            else if (jsonData.conversations[i].events[j].conversation_rename)
             {//else if it's renaming the group
-                message.content = "Changed group chat name to "+jsonData.conversation_state[i].conversation_state.event[j].conversation_rename.new_name;
+                message.content = "Changed group chat name to "+jsonData.conversations[i].events[j].conversation_rename.new_name;
             }
-            else if (jsonData.conversation_state[i].conversation_state.event[j].hangout_event)
-            {//else if it's a call using gangouts
-                if (jsonData.conversation_state[i].conversation_state.event[j].hangout_event.event_type === "START_HANGOUT")
+            else if (jsonData.conversations[i].events[j].hangout_event)
+            {//else if it's a call using hangouts
+                if (jsonData.conversations[i].events[j].hangout_event.event_type === "START_HANGOUT")
                 {
                     message.content = "Started a Hangout";
                 }
-                else if (jsonData.conversation_state[i].conversation_state.event[j].hangout_event.event_type === "END_HANGOUT")
+                else if (jsonData.conversations[i].events[j].hangout_event.event_type === "END_HANGOUT")
                 {
                     message.content = "Ended a Hangout";
                 }
             }
-            else 
+            else
             {//if it's not a message or renaming the group
                console.warn("%c Unknown format for conversation "+i+" message "+j+"", "background: #FF0000");
-               console.dir(jsonData.conversation_state[i].conversation_state.event[j]);
+               console.dir(jsonData.conversations[i].events[j]);
                message.content = "Unknown format, unable to parse message "+j+" in conversation "+i;
                document.getElementById("unknownMessageAlert").className = "row";
             }
             conversation.messages.push(message);
-            progress += ((1/jsonData.conversation_state.length)*(1/jsonData.conversation_state[i].conversation_state.event.length)*100);
+            progress += ((1/jsonData.conversations.length)*(1/jsonData.conversations[i].events.length)*100);
             document.getElementById("parseBar").style.width = Math.floor(progress)+"%";
         }
-        conversation.messages.sort(function(a, b) 
+        conversation.messages.sort(function(a, b)
         {
             return parseFloat(a.unixtime) - parseFloat(b.unixtime);
         });
@@ -159,17 +159,17 @@ function parseData()
 function getParticipants(index)
 {
     var participants = [];
-    for (var i = 0; i < jsonData.conversation_state[index].conversation_state.conversation.participant_data.length; i++)
+    for (var i = 0; i < jsonData.conversations[index].conversation.conversation.participant_data.length; i++)
     {
         var person = {};
-        person.id = jsonData.conversation_state[index].conversation_state.conversation.participant_data[i].id.gaia_id;
-        if (jsonData.conversation_state[index].conversation_state.conversation.participant_data[i].fallback_name !== undefined)
+        person.id = jsonData.conversations[index].conversation.conversation.participant_data[i].id.gaia_id;
+        if (jsonData.conversations[index].conversation.conversation.participant_data[i].fallback_name !== undefined)
         {
-            person.name = jsonData.conversation_state[index].conversation_state.conversation.participant_data[i].fallback_name;
+            person.name = jsonData.conversations[index].conversation.conversation.participant_data[i].fallback_name;
         }
-        else 
+        else
         {
-            person.name = jsonData.conversation_state[index].conversation_state.conversation.participant_data[i].id.gaia_id;
+            person.name = jsonData.conversations[index].conversation.conversation.participant_data[i].id.gaia_id;
         }
         participants.push(person);
     }
@@ -264,7 +264,7 @@ function toHtml()
             +getMessageClass(i,simpleJson[i].messages[j].sender)+"'>"+
             simpleJson[i].messages[j].content+"<div class='d'>"+simpleJson[i].messages[j].sender.name +", "
             +unixToReadable(simpleJson[i].messages[j].unixtime)+"</div></div>"+"\r\n <div class='nl'></div>";
-            
+
             progress += (1/simpleJson.length)*(1/simpleJson[i].messages.length)*100;
             document.getElementById("toFileBar").style.width = Math.floor(progress)+"%";
         }
@@ -277,7 +277,7 @@ function toHtml()
 
 function getLetterCircle(i, sender)
 {
-    if (sender.id === jsonData.conversation_state[i].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id)
+    if (sender.id === jsonData.conversations[i].conversation.conversation.self_conversation.self_read_state.participant_id.gaia_id)
     {
         return "";
     }
@@ -286,7 +286,7 @@ function getLetterCircle(i, sender)
 
 function getMessageClass(i, sender)
 {
-    if (sender.id === jsonData.conversation_state[i].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id)
+    if (sender.id === jsonData.conversations[i].conversation.conversation.self_conversation.self_read_state.participant_id.gaia_id)
     {
         return "s";
     }
@@ -302,17 +302,17 @@ function unixToReadable(unix)
 
 function nameFile(i)
 {
-    if ((jsonData.conversation_state[i].conversation_state.conversation.name !== undefined)&&
-        (jsonData.conversation_state[i].conversation_state.conversation.name != ""))
+    if ((jsonData.conversations[i].conversation.conversation.name !== undefined)&&
+        (jsonData.conversations[i].conversation.conversation.name != ""))
     {
-        return jsonData.conversation_state[i].conversation_state.conversation.name;
+        return jsonData.conversations[i].conversation.conversation.name;
     }
     var participants = [];
     var index;
     for (var k=0; k < simpleJson[i].participants.length; k++)
     {
         participants[k] = simpleJson[i].participants[k].name;
-        if (simpleJson[i].participants[k].id === jsonData.conversation_state[i].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id)
+        if (simpleJson[i].participants[k].id === jsonData.conversations[i].conversation.conversation.self_conversation_state.self_read_state.participant_id.gaia_id)
         {
             index = k;
         }
@@ -348,12 +348,12 @@ hangons.controller('mainController', function ($scope)
         $scope.angFiles = files;
         $scope.$apply();
     };
-    
+
     $scope.angDownload=function(fileName, fileValue)
     {
         download(fileName, fileValue);
     }
-    
+
     $scope.testAngular=function()
     {
         alert("test Passed");
