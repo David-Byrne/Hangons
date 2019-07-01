@@ -277,7 +277,7 @@ function toHtml()
 
 function getLetterCircle(i, sender)
 {
-    if (sender.id === jsonData.conversations[i].conversation.conversation.self_conversation.self_read_state.participant_id.gaia_id)
+    if (sender.id === jsonData.conversations[i].conversation.conversation.self_conversation_state.self_read_state.participant_id.gaia_id)
     {
         return "";
     }
@@ -286,7 +286,7 @@ function getLetterCircle(i, sender)
 
 function getMessageClass(i, sender)
 {
-    if (sender.id === jsonData.conversations[i].conversation.conversation.self_conversation.self_read_state.participant_id.gaia_id)
+    if (sender.id === jsonData.conversations[i].conversation.conversation.self_conversation_state.self_read_state.participant_id.gaia_id)
     {
         return "s";
     }
