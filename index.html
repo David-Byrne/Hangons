@@ -141,15 +141,18 @@
             <div class="navbar-form form-group center-block" ng-hide="angFiles === undefined || angFiles.length === 0">
                 <input type="text" placeholder="Search by Name" class="form-control" id="inputDefault" ng-model="query">
             </div>
+
+            <div class="fileButton" ng-hide="!angFiles">
+                <a href="#" class="btn btn-default colouredButton fileButton" ng-click="angDownloadAll()"> Download All </a>
+            </div>
+
+            <br/>
+
             <span ng-repeat="file in angFiles track by $index" >
                 <span class="fileButton" ng-hide="file.name.toUpperCase().search(query.toUpperCase()) === -1">
                 <a href="#" class="btn btn-default colouredButton fileButton" ng-click="angDownload(file.name+file.type, file.messages )"> {{file.name+file.type}}</a>
                 </span>
             </span>
-            
-            <div class="fileButton">
-                <a href="#" class="btn btn-default colouredButton fileButton" ng-click="for (const file of angFiles) {angDownload(file.name+file.type, file.messages)}"> Download All </a>
-            </div>
         </div>
     </div>
 </body>
