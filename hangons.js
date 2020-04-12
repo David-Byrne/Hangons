@@ -354,6 +354,14 @@ hangons.controller('mainController', function ($scope)
         download(fileName, fileValue);
     }
 
+    $scope.angDownloadAll=function()
+    {
+        for (const file of $scope.angFiles)
+        {
+            download(file.name + file.type, file.messages);
+        }
+    }
+
     $scope.testAngular=function()
     {
         alert("test Passed");
