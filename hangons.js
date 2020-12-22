@@ -130,6 +130,14 @@ function parseData()
                     message.content = "Ended a Hangout";
                 }
             }
+            else if (jsonData.conversations[i].events[j].event_type === "ADD_USER")
+            {//else if it's a new user joining
+                message.content = message.sender.name+" has joined the hangout"
+            }//else if it's a user leaving
+            else if (jsonData.conversations[i].events[j].event_type === "REMOVE_USER")
+            {
+                message.content = message.sender.name+" has left the hangout"
+            }
             else
             {//if it's not a message or renaming the group
                console.warn("%c Unknown format for conversation "+i+" message "+j+"", "background: #FF0000");
