@@ -198,6 +198,52 @@ function getName(id, participants)
     return id;
 }
 
+function imagify(inputText)
+{
+    var replacedText, replacePattern1, replacePattern2;
+
+    if (inputText === undefined)
+    {
+        inputText = "";
+    }
+
+		// Extract URL
+    replacePattern1 = /((https:\/\/lh3\.googleusercontent\.com)([/|.|\w|\s|-])*\.(jpg|jpeg|gif|png))/gim;
+    replacedText = inputText.replace(replacePattern1, '<img src="$1" alt="Google Hangouts Image" />');
+
+		// Scale image
+    replacePattern2 = /<img src=\"((.*)(\/s0\/)([^"]*))\"/gim;
+    replacedText = replacedText.replace(replacePattern2, '<img src="$2/s512/$4"');
+
+    return replacedText;
+
+}
+
+function linkify(inputText)
+{
+    var replacedText, replacePattern1, replacePattern2, replacePattern3;
+
+    // Catch for undefined input text
+    if (inputText === undefined)
+    {
+        inputText = "";
+    }
+
+    //URLs starting with http://, https://, or ftp:// that aren't preceded by src=" (images)
+    replacePattern1 = /((?!src=").{5}|^.{0,4})(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+    replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
+
+    //URLs starting with "www." (without // before it, or it'd re-link the ones done above) that aren't preceded by src=" (images)
+    replacePattern2 = /((?!src=").{5}|^.{0,4})(^|[^\/])(www\.[\S]+(\b|$))/gim;
+    replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
+
+    //Change email addresses to mailto:: links.
+    replacePattern3 = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
+    replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
+
+    return replacedText;
+}
+
 function toTxt()
 {
     files = [];
@@ -261,7 +307,9 @@ function toHtml()
         "<style>body{background-color: #ECEFF1;font-family: 'Roboto', sans-serif;}"+"\r\n"+
         ".m{padding: 10px;margin: 2px;display: inline-block;border-radius:10px;max-width: 77vw;}"+"\r\n"+
         ".s{border-top-right-radius: 0px;float:right;background-color: #CFD8DC;}"+"\r\n"+
+        ".s>img{float:right;margin-bottom:5px;}"+"\r\n"+
         ".r{border-top-left-radius: 0px;float:left;background-color: #ffffff;}"+"\r\n"+
+        ".r>img{float:left;margin-bottom:5px;}"+"\r\n"+
         ".d{font-size: x-small;}"+"\r\n"+
         ".c{float:left;border-radius: 50%;width: 20px;height: 20px;background-color: #1AA260;color: white;text-align: center;}"+"\r\n"+
         ".nl{clear: both;float: left;display: block;position: relative;}"+"\r\n"+
@@ -270,7 +318,7 @@ function toHtml()
         {
             conversation.messages += getLetterCircle(i,simpleJson[i].messages[j].sender) +"<div class='m "
             +getMessageClass(i,simpleJson[i].messages[j].sender)+"'>"+
-            simpleJson[i].messages[j].content+"<div class='d'>"+simpleJson[i].messages[j].sender.name +", "
+            linkify(imagify(simpleJson[i].messages[j].content))+"<div class='d'>"+simpleJson[i].messages[j].sender.name +", "
             +unixToReadable(simpleJson[i].messages[j].unixtime)+"</div></div>"+"\r\n <div class='nl'></div>";
 
             progress += (1/simpleJson.length)*(1/simpleJson[i].messages.length)*100;
