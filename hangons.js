@@ -207,11 +207,11 @@ function imagify(inputText)
         inputText = "";
     }
 
-		// Extract URL
+    // Extract URL
     replacePattern1 = /((https:\/\/lh3\.googleusercontent\.com)([/|.|\w|\s|-])*\.(jpg|jpeg|gif|png))/gim;
     replacedText = inputText.replace(replacePattern1, '<img src="$1" alt="Google Hangouts Image" />');
 
-		// Scale image
+    // Scale image
     replacePattern2 = /<img src=\"((.*)(\/s0\/)([^"]*))\"/gim;
     replacedText = replacedText.replace(replacePattern2, '<img src="$2/s512/$4"');
 
