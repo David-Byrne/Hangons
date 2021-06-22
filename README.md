@@ -2,7 +2,7 @@
 ### A completely clientside Hangouts.json parser.
 
 It's got a clean and modern look with a responsive design that looks well on any screen size. The option light up as you go along
-creating an intuitive user experience
+creating an intuitive user experience.
 ![Homescreen](https://raw.githubusercontent.com/David-Byrne/Hangons/master/images/homescreen.png)
 
 #### Getting Started
@@ -15,8 +15,8 @@ Next choose what format you'd like out of:
 - CSV
 - HTML
 
-Finally choose which users you'd like to downlaod data for, if applicable. (Simplified JSON gives you a single file for all your data)
+Finally choose which users you'd like to downlaod data for, if applicable. (Simplified JSON gives you a single file for all your data).
 
-For any feedback either raise an issue on Github or fill out [this form](https://docs.google.com/forms/d/1YEmJ5ScZbtJ6_U6RtpCLdhoSZs1i6kMipM0jVOBQnpc/viewform?usp=send_form)
+For any feedback [create an issue on Github](https://github.com/David-Byrne/Hangons/issues/new).
 
-Released under an MIT licence
+Released under an MIT licence.
